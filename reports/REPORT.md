@@ -29,12 +29,12 @@ Ba lượt tua bắt được gì (lượt 1 nhìn ID, lượt 2 frame đầu/cu
 - Lượt 2: kiểm tra frame đầu/cuối để tránh bbox treo sau khi xe rời khung.
 - Lượt 3: kiểm tra các frame giữa quanh đoạn che khuất để giảm ID switch.
 
-Kiểm chéo với: chưa ghi. Chi tiết ở `reports/review_partner.md`.
-Số lỗi bạn tìm được trong bản của bạn ấy: chưa ghi. Số lỗi bạn ấy tìm được trong bản của bạn: chưa ghi.
+Kiểm chéo với: `Nguyen Xuan Viet Anh` qua repo GitHub và đối chiếu metric peer. Chi tiết ở `reports/review_partner.md` và `reports/PEER_COMPARISON.md`.
+Số lỗi/nhóm lỗi chính tìm được trong bản của tôi: 5 finding cần review. So với bản peer, điểm yếu lớn nhất của tôi là coverage thấp hơn: FN 86 so với FN 3.
 
 Ca nào hai người quyết khác nhau, và luật nào còn thiếu trong `GUIDELINE_MINI.md`?
 
-Cần bổ sung rõ luật cho xe chỉ xuất hiện 1-2 frame ở rìa ảnh và luật giữ ID khi xe bị che ngắn nhưng không liên tục trong export.
+Cần bổ sung rõ luật cho xe chỉ xuất hiện 1-2 frame ở rìa ảnh, luật giữ ID khi bị che ngắn, và checklist bắt buộc cho các track thiếu endpoint.
 
 ## 3. Pre-gold lock và chấm trước/sau rework
 
@@ -115,11 +115,11 @@ Tôi sẽ sửa `GUIDELINE_MINI.md` theo ba điểm:
 - [x] `annotations/clip_01/gt.txt`
 - [x] `annotations/clip_02/gt.txt`
 - [x] `evidence/pre-gold/clip_01/gt.txt` và `manifest.json`
-- [ ] `GUIDELINE_MINI.md` đã điền
+- [x] `GUIDELINE_MINI.md` đã điền
 - [x] `outputs/eval_vs_gold.json`
 - [x] `outputs/model_bytetrack_clip_01.txt`
 - [x] `outputs/model_reid_clip_01.txt`
 - [x] `outputs/model_run_config.json`
 - [x] `outputs/eval_bytetrack_vs_gold.json`, `outputs/eval_reid_vs_gold.json`, `outputs/eval_reid_vs_me.json`
-- [ ] `reports/review_partner.md`
+- [x] `reports/review_partner.md`
 - [x] `reports/REPORT.md` (file này)
