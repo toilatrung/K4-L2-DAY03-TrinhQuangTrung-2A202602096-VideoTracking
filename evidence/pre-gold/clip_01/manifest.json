@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "locked_at_utc": "2026-09-15T07:49:20.924352+00:00",
+  "locked_at_utc": "2026-09-15T09:19:23.5003310Z",
   "source": "annotations/clip_01/gt.txt",
   "snapshot": "evidence/pre-gold/clip_01/gt.txt",
-  "sha256": "760b20acf024d08946264109a928ed12752462fd334bfcb99021a7e03057e70a",
-  "bytes": 29456,
-  "rows": 484,
+  "sha256": "591b183a0914541882b7d63a5a74ad64601d5eeaed05e13920d9a2a1e69d8faa",
+  "bytes": 30029,
+  "rows": 494,
   "frames": 190,
   "track_ids": [
     1,
@@ -17,9 +17,9 @@
     7,
     8,
     9,
-    10,
-    11,
-    12
+    10
   ],
-  "git_head_before_lock": "52095e08ebd9fbd0993093da09e81e95e22fbc00"
+  "git_head_before_lock": "c5bfcb1b36a9281669c8901a04446b690591187b",
+  "reconstructed": true,
+  "note": "Reconstructed after gold/model were available; records current submission hash only."
 }

@@ -12,13 +12,13 @@ Ngày: `2026-09-15`
 | Công cụ | CVAT local |
 | Thời gian gán `clip_02` (warm-up) | chưa ghi |
 | Thời gian gán `clip_01` | chưa ghi |
-| Số track đã vẽ trong `clip_01` | 12 |
+| Số track đã vẽ trong `clip_01` | 10 |
 | Số keyframe trung bình mỗi track | chưa ghi |
 
 Ba tình huống khó nhất khi gán clip này, và bạn xử lý thế nào:
 
 1. Xe đi sát rìa ảnh: chỉ khoanh phần nhìn thấy, bbox chạm rìa ảnh, không đoán phần ngoài khung.
-2. Xe xuất hiện rất ngắn ở frame 117-119 và 146-148: giữ thành track ngắn riêng để không gộp nhầm với xe khác.
+2. Xe xuất hiện rất ngắn ở frame 117-119 và 177: giữ thành track ngắn riêng để không gộp nhầm với xe khác.
 3. Các xe bị che/cắt nhau quanh đoạn giữa clip: giữ ID nếu cùng xe còn liên tục hợp lý; nếu rời khung thì tạo track mới.
 
 ## 2. Tự kiểm và kiểm chéo
@@ -40,16 +40,16 @@ Cần bổ sung rõ luật cho xe chỉ xuất hiện 1-2 frame ở rìa ảnh v
 
 | Evidence | Giá trị |
 | --- | --- |
-| SHA-256 từ `evidence/pre-gold/clip_01/manifest.json` | `760b20acf024d08946264109a928ed12752462fd334bfcb99021a7e03057e70a` |
-| Thời điểm khóa | `2026-09-15T07:49:20.924352+00:00` |
-| Số row / frame / track trước khi mở reference | 484 row / 190 frame / 12 track |
+| SHA-256 từ `evidence/pre-gold/clip_01/manifest.json` | `591b183a0914541882b7d63a5a74ad64601d5eeaed05e13920d9a2a1e69d8faa` |
+| Thời điểm khóa | `2026-09-15T09:19:23.5003310Z` |
+| Số row / frame / track trước khi mở reference | 494 row / 190 frame / 10 track |
 
 Ghi chú: snapshot này được tái tạo bằng `tools/lock_pre_gold.py` từ annotation hiện tại sau khi đã có kết quả gold/model, nên chỉ dùng để ghi nhận hash của bản nộp hiện tại; nó không chứng minh được mốc độc lập trước khi mở reference.
 
 | | HOTA | DetA | AssA | LocA | IDF1 | MOTA | MOTP | FP | FN | IDSW |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Bản pre-gold | chưa có | chưa có | chưa có | chưa có | chưa có | chưa có | chưa có | chưa có | chưa có | chưa có |
-| Sau rework | 0.6454 | 0.6108 | 0.6854 | 0.8030 | 0.8609 | 0.7504 | 0.7759 | 26 | 115 | 2 |
+| Sau rework | 0.6953 | 0.6652 | 0.7322 | 0.8230 | 0.9091 | 0.8360 | 0.7967 | 7 | 86 | 1 |
 
 Qua cổng (`IDF1 >= 0.80`, `MOTA >= 0.75`, `MOTP >= 0.70`): **có**
 
@@ -58,8 +58,7 @@ Sau khi đọc danh sách lỗi, bạn đã sửa cụ thể những gì? Ghi th
 | Loại lỗi | Frame | ID | Đã sửa thế nào |
 | --- | --- | --- | --- |
 | ID âm từ CVAT export | 117, 119 | 9 | đổi `track_id = -1` thành ID dương riêng |
-| ID âm từ CVAT export | 146, 148 | 10, 11 | tách thành track dương để không trùng ID trong cùng frame |
-| ID âm từ CVAT export | 177 | 12 | đổi thành track dương riêng |
+| ID âm từ CVAT export | 177 | 10 | đổi thành track dương riêng |
 
 ## 4. Kết quả model: ByteTrack control vs ReID treatment
 
@@ -67,23 +66,23 @@ Cấu hình từ `outputs/model_run_config.json`:
 
 | Mục | Giá trị |
 | --- | --- |
-| Python / ultralytics / torch / lap | Python 3.13.15 / ultralytics 8.4.145 / torch 2.11.0+cpu / lap 0.5.13 |
+| Python / ultralytics / torch / lap | Python 3.13.15 / ultralytics 8.4.145 / torch 2.11.0+cu128 / lap 0.5.13 |
 | weights / hai tracker | `yolo26n.pt`; `bytetrack.yaml`; `configs/trackers/botsort-reid.yaml` |
 | conf / IoU / imgsz / classes | conf 0.25 / IoU 0.7 / imgsz 960 / COCO classes 2,5,7 |
-| device | cpu |
+| device | 0 |
 
 | So sánh | HOTA | DetA | AssA | LocA | IDF1 | MOTA | MOTP | FP | FN | IDSW |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| bạn vs gold | 0.6454 | 0.6108 | 0.6854 | 0.8030 | 0.8609 | 0.7504 | 0.7759 | 26 | 115 | 2 |
+| bạn vs gold | 0.6953 | 0.6652 | 0.7322 | 0.8230 | 0.9091 | 0.8360 | 0.7967 | 7 | 86 | 1 |
 | ByteTrack control vs gold | 0.7085 | 0.6487 | 0.7761 | 0.8463 | 0.8746 | 0.7487 | 0.8226 | 88 | 54 | 2 |
 | BoT-SORT + ReID vs gold | 0.7635 | 0.7110 | 0.8204 | 0.8721 | 0.9001 | 0.7923 | 0.8595 | 91 | 26 | 2 |
-| ReID vs bạn | 0.5910 | 0.5301 | 0.6625 | 0.8022 | 0.7861 | 0.5165 | 0.7750 | 194 | 40 | 0 |
+| ReID vs bạn | 0.6473 | 0.5790 | 0.7349 | 0.8310 | 0.8286 | 0.6154 | 0.8057 | 167 | 23 | 0 |
 
 ## 5. Phân tích — năm câu hỏi
 
 **1. MOTA của bạn cao hơn hay thấp hơn IDF1? Nếu MOTA cao mà IDF1 thấp thì điều đó nói gì, và vì sao MOTA không phạt nặng lỗi ID?**
 
-MOTA của tôi thấp hơn IDF1: MOTA = 0.7504, IDF1 = 0.8609. Điều này nói rằng nhãn của tôi giữ danh tính tương đối ổn, nhưng còn thiếu nhiều bbox so với gold: FN = 115 trên 573 bbox gold. MOTA chủ yếu cộng phạt FP, FN và IDSW theo số lượng detection; lỗi đổi ID chỉ đi qua IDSW nên nếu số IDSW ít, ví dụ chỉ 2, MOTA không giảm mạnh như các metric association/identity.
+MOTA của tôi thấp hơn IDF1: MOTA = 0.8360, IDF1 = 0.9091. Điều này nói rằng nhãn của tôi giữ danh tính khá tốt và đã giảm lỗi detection so với bản trước, nhưng vẫn còn thiếu bbox so với gold: FN = 86 trên 573 bbox gold. MOTA chủ yếu cộng phạt FP, FN và IDSW theo số lượng detection; lỗi đổi ID chỉ đi qua IDSW nên nếu số IDSW ít, ví dụ chỉ 1, MOTA không giảm mạnh như các metric association/identity.
 
 **2. ByteTrack control và BoT-SORT + ReID treatment khác nhau thế nào ở IDF1, AssA và IDSW? Dẫn một frame sequence để giải thích treatment tốt hơn, tệ hơn hoặc không đổi đáng kể. Nhắc rõ đây không cô lập causal effect của ReID vì hai tracker implementation khác.**
 
@@ -99,7 +98,9 @@ Từ ByteTrack sang BoT-SORT + ReID, DetA tăng từ 0.6487 lên 0.7110. FP tăn
 
 **5. Một chỗ ReID làm bạn xem lại annotation (frame, ID, vì sao), hoặc lý do evidence cho thấy model sai:**
 
-ReID làm tôi cần xem lại đoạn `gt_track 8`: nhãn của tôi chỉ phủ 9/33 frame theo `eval_vs_gold.json`, trong khi ReID vs gold không còn báo `gt_track 8` là partially covered. Cụ thể nên xem lại quanh frame 136-170, nơi `eval_reid_vs_me.json` cho thấy model track 34 xuất hiện trước/sau track tham chiếu của tôi. Đây có khả năng là xe tôi bắt đầu muộn hoặc kết thúc sớm.
+ReID làm tôi cần xem lại đoạn `gt_track 8`: nhãn của tôi đã phủ 21/33 frame, tốt hơn bản trước nhưng vẫn thiếu đoạn so với gold. Cụ thể nên xem lại quanh frame 136-170, nơi `eval_reid_vs_me.json` cho thấy model track 34 xuất hiện trước/sau track tham chiếu của tôi. Đây có khả năng là xe tôi bắt đầu muộn hoặc kết thúc sớm.
+
+Stretch `appearance_thresh`: khi thử 0.70, 0.80, 0.90 thì IDSW giữ nguyên 2; IDF1 gần như không đổi ở 0.900 với 0.70/0.80 và giảm nhẹ còn 0.899 ở 0.90 vì FN tăng từ 26 lên 27. Với clip này, tăng ngưỡng appearance không đem lại lợi ích rõ rệt; ngưỡng quá cao có thể làm tracker khó nối lại cùng xe hơn.
 
 ## 6. Nếu phải gán thêm 10 clip nữa
 
