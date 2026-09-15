@@ -40,9 +40,11 @@ Cần bổ sung rõ luật cho xe chỉ xuất hiện 1-2 frame ở rìa ảnh v
 
 | Evidence | Giá trị |
 | --- | --- |
-| SHA-256 từ `evidence/pre-gold/clip_01/manifest.json` | chưa có manifest |
-| Thời điểm khóa | chưa có manifest |
-| Số row / frame / track trước khi mở reference | chưa có manifest |
+| SHA-256 từ `evidence/pre-gold/clip_01/manifest.json` | `760b20acf024d08946264109a928ed12752462fd334bfcb99021a7e03057e70a` |
+| Thời điểm khóa | `2026-09-15T07:49:20.924352+00:00` |
+| Số row / frame / track trước khi mở reference | 484 row / 190 frame / 12 track |
+
+Ghi chú: snapshot này được tái tạo bằng `tools/lock_pre_gold.py` từ annotation hiện tại sau khi đã có kết quả gold/model, nên chỉ dùng để ghi nhận hash của bản nộp hiện tại; nó không chứng minh được mốc độc lập trước khi mở reference.
 
 | | HOTA | DetA | AssA | LocA | IDF1 | MOTA | MOTP | FP | FN | IDSW |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -111,7 +113,7 @@ Tôi sẽ sửa `GUIDELINE_MINI.md` theo ba điểm:
 
 - [x] `annotations/clip_01/gt.txt`
 - [x] `annotations/clip_02/gt.txt`
-- [ ] `evidence/pre-gold/clip_01/gt.txt` và `manifest.json`
+- [x] `evidence/pre-gold/clip_01/gt.txt` và `manifest.json`
 - [ ] `GUIDELINE_MINI.md` đã điền
 - [x] `outputs/eval_vs_gold.json`
 - [x] `outputs/model_bytetrack_clip_01.txt`
